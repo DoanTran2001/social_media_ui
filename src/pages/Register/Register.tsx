@@ -5,18 +5,19 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 
 import { useForm } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useMutation } from '@tanstack/react-query'
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation } from "@tanstack/react-query";
 import InputForm from "../../components/InputForm/InputForm";
 import InputPassword from "../../components/InputPassword";
 import authAPI from "../../apis/auth.api";
 import { schema } from "../../utils/rules";
+import { toast } from "react-toastify";
 
 type FormData = {
-  name: string,
-  email: string,
-  password: string
-}
+  name: string;
+  email: string;
+  password: string;
+};
 
 const Wrapper = styled("div")(() => ({
   maxWidth: "350px",
@@ -30,23 +31,23 @@ function Register() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
   });
   const registerAccountMutation = useMutation({
-    mutationFn: (body: FormData) => authAPI.registerAccount(body)
-  })
-  console.log(errors);
+    mutationFn: (body: FormData) => authAPI.registerAccount(body),
+  });
   const handleSubmitRegister = async (value: any) => {
     console.log(value);
     registerAccountMutation.mutate(value, {
-      onSuccess: data => {
+      onSuccess: (data) => {
         console.log(data);
-      },
-      onError: (error) => {
-        console.log("handleSubmitRegister ~ error:", error)
         
-      }
-    })
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message)
+        console.log("handleSubmitRegister ~ error:", error);
+      },
+    });
   };
   return (
     <Wrapper>
@@ -66,12 +67,23 @@ function Register() {
           onSubmit={handleSubmit(handleSubmitRegister)}
           autoComplete="off"
         >
-          <InputForm control={control} name="name" label="Tên" error={errors.name}/>
-          <InputForm control={control} name="email" label="Email" error={errors.email}/>
+          <InputForm
+            control={control}
+            name="name"
+            label="Tên"
+            error={errors.name}
+          />
+          <InputForm
+            control={control}
+            name="email"
+            label="Email"
+            error={errors.email}
+          />
           <InputPassword
             control={control}
             name="password"
             htmlForInput="password"
+            error={errors.password}
           />
           <Button
             type="submit"

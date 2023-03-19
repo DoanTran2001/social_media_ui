@@ -3,16 +3,18 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false
-    }
-  }
-})
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -20,9 +22,10 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <App />
+        <ToastContainer />
+      </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

@@ -1,6 +1,11 @@
 import { ThemeOptions } from '@mui/material'
 
 export const themeOptions: ThemeOptions = {
+  typography: {
+    h3: {
+      fontSize: '1.1rem'
+    }
+  },
   palette: {
     primary: {
       main: "#5e72e4",

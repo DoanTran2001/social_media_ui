@@ -5,6 +5,7 @@ import {
   Input,
   InputAdornment,
   IconButton,
+  FormHelperText,
 } from "@mui/material";
 import { useController } from 'react-hook-form'
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -14,10 +15,11 @@ interface InputPasswordProps {
   htmlForInput: string,
   name: string,
   control: any,
+  error: any
 }
 
 function InputPassword(props: InputPasswordProps) {
-  const { name, control, htmlForInput, } = props
+  const { name, control, htmlForInput, error} = props
   const [showPassword, setShowPassword] = useState(false);
   const { field } = useController({
     control,
@@ -34,6 +36,7 @@ function InputPassword(props: InputPasswordProps) {
         id={htmlForInput}
         type={showPassword ? "text" : "password"}
         {...field}
+        error={error}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
@@ -45,6 +48,7 @@ function InputPassword(props: InputPasswordProps) {
           </InputAdornment>
         }
       />
+      {error && <FormHelperText sx={{color: 'red'}}>{error.message}</FormHelperText>}
     </FormControl>
   );
 }

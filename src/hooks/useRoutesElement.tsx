@@ -1,7 +1,10 @@
-import { useRoutes } from 'react-router-dom'
-import { path } from '../constants/path'
-import AuthLayout from '../layouts/AuthLayout'
-import Register from '../pages/Register'
+import { useRoutes } from "react-router-dom";
+import { path } from "../constants/path";
+import AuthLayout from "../layouts/AuthLayout";
+import MainLayout from "../layouts/MainLayout";
+import Home from "../pages/Home";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
 
 export default function useRoutesElement() {
   const routeElement = useRoutes([
@@ -11,8 +14,24 @@ export default function useRoutesElement() {
         <AuthLayout>
           <Register />
         </AuthLayout>
-      )
-    }
-  ])
-  return routeElement
+      ),
+    },
+    {
+      path: path.login,
+      element: (
+        <AuthLayout>
+          <Login />
+        </AuthLayout>
+      ),
+    },
+    {
+      path: path.home,
+      element: (
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      ),
+    },
+  ]);
+  return routeElement;
 }

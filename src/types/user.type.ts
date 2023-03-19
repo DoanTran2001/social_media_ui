@@ -5,5 +5,8 @@ export default interface User {
   date_of_birth?: string,
   avatar?: string,
   address?: string,
-  phone?: string
+  phone?: string,
+  friends: string[],
+  social: {},
+  posts: string[]
 }

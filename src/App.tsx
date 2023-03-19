@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import useRoutesElement from "./hooks/useRoutesElement";
 import { themeOptions } from "./themes/theme";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { Box, Container, createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 
 const theme = createTheme(themeOptions);
@@ -13,7 +13,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {routes}
+      <>{routes}</>
     </ThemeProvider>
   );
 }
