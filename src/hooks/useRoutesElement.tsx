@@ -4,6 +4,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Profile from "../pages/Profile";
 import Register from "../pages/Register";
 
 export default function useRoutesElement() {
@@ -32,6 +33,14 @@ export default function useRoutesElement() {
         </MainLayout>
       ),
     },
+    {
+      path: path.profile,
+      element: (
+        <MainLayout>
+          <Profile />
+        </MainLayout>
+      )
+    }
   ]);
   return routeElement;
 }

@@ -1,7 +1,8 @@
 import { styled } from '@mui/material/styles'
 
 export const SideLeft: any = styled('div')(() => ({
-  width: '25%'
+  width: '25%',
+  flexShrink: 0
 }))
 
 export const Content = styled('div')(() => ({

@@ -8,13 +8,14 @@ interface InputProps {
   type?: string;
   control: any;
   error: any;
+  defaultValue?: string
 }
 
-function InputForm({ label, name, type = "text", control, error }: InputProps) {
+function InputForm({ label, name, type = "text", control, error, defaultValue = "" }: InputProps) {
   const { field } = useController({
     control,
     name,
-    defaultValue: "",
+    defaultValue,
   });
   return (
     <TextField

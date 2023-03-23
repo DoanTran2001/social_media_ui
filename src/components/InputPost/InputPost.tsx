@@ -1,5 +1,7 @@
 import { Avatar, Modal, TextField, Box } from "@mui/material";
+import { useSelector } from "react-redux";
 import useModal from "../../hooks/useModal";
+import { RootState } from "../../store";
 import CreatePost from "../CreatePost";
 
 function InputPost() {
@@ -8,10 +10,11 @@ function InputPost() {
     closeModal: closeModalCreatePost,
     openModal: openModalCreatePost,
   } = useModal();
+  const user = useSelector((state: RootState) => state.user)
   return (
     <div>
       <TextField
-        placeholder="Đoan ơi, Bạn đang nghĩ gì thế!"
+        placeholder={`${user?.name} ơi, Bạn đang nghĩ gì thế`}
         sx={{ width: "100%" }}
         onClick={openModalCreatePost}
         InputProps={{

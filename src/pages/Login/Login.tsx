@@ -12,6 +12,8 @@ import InputPassword from "../../components/InputPassword";
 import authAPI from '../../apis/auth.api'
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../redux/user.slice";
 
 
 type FormData = {
@@ -32,6 +34,8 @@ function Login() {
     formState: { errors },
   } = useForm<FormData>();
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
   const loginAccountMutation = useMutation({
     mutationFn: (body: { email: string, password: string}) => authAPI.loginAccount(body)
   })
@@ -39,8 +43,9 @@ function Login() {
     console.log(values);
     loginAccountMutation.mutate(values, {
       onSuccess: (data) => {
+        console.log("handleSubmitLogin ~ data:", data)
         toast.success(data.data.message)
-        localStorage.setItem('userInfo-social-media', JSON.stringify(data.data.data?.user))
+        dispatch(setUser(data.data.data?.user))
         navigate('/')
       },
       onError: (error: any) => {

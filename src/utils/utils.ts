@@ -1,4 +1,6 @@
 import Cookies from "js-cookie";
+import Avatar from "@mui/material/Avatar";
+import { FC, ReactNode } from "react";
 
 export const generateNameAvatar = (name: string): string => {
   const result = name.trim().split(" ");
@@ -6,6 +8,8 @@ export const generateNameAvatar = (name: string): string => {
     ? result[0][0]
     : `${result[0][0]}${result[result.length - 1][0]}`;
 };
+
+
 
 export const getTokenFromCookie = () => {
   const token = Cookies.get("access_token");
@@ -42,6 +46,6 @@ export const getDate = (date: Date) => {
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
   const hours = date.getHours();
-  const mimute = date.getMinutes()
-  return `${dayOfWeek}, ${dayOfMonth} tháng ${month}, ${year} lúc ${hours}:${mimute}`
+  const mimute = date.getMinutes();
+  return `${dayOfWeek}, ${dayOfMonth} tháng ${month}, ${year} lúc ${hours}:${mimute}`;
 };

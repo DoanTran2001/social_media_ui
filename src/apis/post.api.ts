@@ -9,6 +9,9 @@ const postApi = {
     content: string
   }) {
     return http.post('/posts', body)
+  },
+  getPostByUser() {
+    return http.get('/posts')
   }
 }
 export default postApi

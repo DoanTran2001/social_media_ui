@@ -21,7 +21,14 @@ import { Avatar, Divider, ListItemIcon, Popover } from "@mui/material";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-import { getCookie, getTokenFromCookie } from "../../utils/utils";
+import {
+  generateNameAvatar,
+  getCookie,
+  getTokenFromCookie,
+} from "../../utils/utils";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import GenerateAvatar from "../GenerateAvatar";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -71,6 +78,8 @@ export default function Header() {
     anchorEl: anchorElAccount,
     id: idAccount,
   } = usePopover({ idProps: "headerMore" });
+  const user = useSelector((state: RootState) => state.user);
+  console.log("Header ~ user:", user);
   // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     React.useState<null | HTMLElement>(null);
@@ -219,7 +228,14 @@ export default function Header() {
                 aria-haspopup="true"
                 aria-expanded={openAccount ? "true" : undefined}
               >
-                <Avatar sx={{ width: 40, height: 40 }}>DT</Avatar>
+                {/* {user?.avatar ? (
+                  <Avatar src={user.avatar} />
+                ) : (
+                  <Avatar sx={{ width: 40, height: 40 }}>
+                    {generateNameAvatar(user?.name!)}
+                  </Avatar>
+                )} */}
+                <GenerateAvatar avatar={user?.avatar} name={user?.name as string} />
               </IconButton>
             </Tooltip>
             <Popover

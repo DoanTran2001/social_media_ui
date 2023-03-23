@@ -27,7 +27,7 @@ const ButtonClose = styled(Button)(() => ({
 
 function CreatePost({ closeOpenModal }: CreatePostProps) {
   const [content, setContent] = useState("");
-  // console.log(process.env.IMGBB_API_KEY);
+  console.log(process.env.REACT_APP_IMGBB_API_KEY);
   const createPostMutation = useMutation({
     mutationFn: (body: { content: string}) => postApi.createPost(body) 
   })
@@ -52,7 +52,7 @@ function CreatePost({ closeOpenModal }: CreatePostProps) {
           bodyFormData.append("image", file);
           const response = await axios({
             method: "post",
-            url: "https://api.imgbb.com/1/upload?key=2dc2052339a96b2fad5b00723d371074",
+            url: `https://api.imgbb.com/1/upload?key=${process.env.REACT_APP_IMGBB_API_KEY}`,
             data: bodyFormData,
             headers: {
               "Content-Type": "multipart/form-data",
