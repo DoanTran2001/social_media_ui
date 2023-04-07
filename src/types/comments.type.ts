@@ -20,7 +20,10 @@ export type CommentData = {
 };
 
 type SubComment = {
-  author: string;
+  author: {
+    _id: string,
+    name: string
+  };
   content: string;
   createdAt: string;
   _id: string;

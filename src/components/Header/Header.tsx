@@ -29,6 +29,10 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import GenerateAvatar from "../GenerateAvatar";
+import { useTranslation } from "react-i18next";
+import { locales } from "../../i18n/i18n";
+import { useNavigate } from "react-router-dom";
+import { path } from "../../constants/path";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -71,6 +75,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { i18n } = useTranslation();
+  const currentLanguage = locales[i18n.language as keyof typeof locales];
   const {
     open: openAccount,
     handleClick: handleClickAccount,
@@ -78,105 +86,19 @@ export default function Header() {
     anchorEl: anchorElAccount,
     id: idAccount,
   } = usePopover({ idProps: "headerMore" });
+  const {
+    open: openLanguage,
+    handleClick: handleClickLanguage,
+    handleClose: handleCloseLanguage,
+    anchorEl: anchorElLanguage,
+    id: idLanguage,
+  } = usePopover({ idProps: "languageMore" });
+
   const user = useSelector((state: RootState) => state.user);
-  console.log("Header ~ user:", user);
-  // const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
-    React.useState<null | HTMLElement>(null);
 
-  // const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  // const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleChangeLanguage = (lng: "en" | "vi") => {
+    i18n.changeLanguage(lng);
   };
-
-  // const handleMenuClose = () => {
-  //   setAnchorEl(null);
-  //   handleMobileMenuClose();
-  // };
-
-  const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  const menuId = "primary-search-account-menu";
-  // const renderMenu = (
-  //   <Menu
-  //     anchorEl={anchorEl}
-  //     anchorOrigin={{
-  //       vertical: "top",
-  //       horizontal: "right",
-  //     }}
-  //     id={menuId}
-  //     keepMounted
-  //     transformOrigin={{
-  //       vertical: "top",
-  //       horizontal: "right",
-  //     }}
-  //     open={isMenuOpen}
-  //     onClose={handleMenuClose}
-  //   >
-  //     <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-  //     <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-  //   </Menu>
-  // );
-
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  // const renderMobileMenu = (
-  //   <Menu
-  //     anchorEl={mobileMoreAnchorEl}
-  //     anchorOrigin={{
-  //       vertical: "top",
-  //       horizontal: "right",
-  //     }}
-  //     id={mobileMenuId}
-  //     keepMounted
-  //     transformOrigin={{
-  //       vertical: "top",
-  //       horizontal: "right",
-  //     }}
-  //     open={isMobileMenuOpen}
-  //     onClose={handleMobileMenuClose}
-  //   >
-  //     <MenuItem>
-  //       <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-  //         <Badge badgeContent={4} color="error">
-  //           <MailIcon />
-  //         </Badge>
-  //       </IconButton>
-  //       <p>Messages</p>
-  //     </MenuItem>
-  //     <MenuItem>
-  //       <IconButton
-  //         size="large"
-  //         aria-label="show 17 new notifications"
-  //         color="inherit"
-  //       >
-  //         <Badge badgeContent={17} color="error">
-  //           <NotificationsIcon />
-  //         </Badge>
-  //       </IconButton>
-  //       <p>Notifications</p>
-  //     </MenuItem>
-  //     <MenuItem onClick={handleProfileMenuOpen}>
-  //       <IconButton
-  //         size="large"
-  //         aria-label="account of current user"
-  //         aria-controls="primary-search-account-menu"
-  //         aria-haspopup="true"
-  //         color="inherit"
-  //       >
-  //         <AccountCircle />
-  //       </IconButton>
-  //       <p>Profile</p>
-  //     </MenuItem>
-  //   </Menu>
-  // );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -200,26 +122,36 @@ export default function Header() {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
+          <Box
+            sx={{ display: { xs: "none", md: "flex", alignItems: "center" } }}
+          >
+            <Tooltip title={t("language")} arrow>
+              <Typography
+                onClick={handleClickLanguage}
+                aria-controls={openLanguage ? idLanguage : undefined}
+                aria-haspopup="true"
+                aria-expanded={openLanguage ? "true" : undefined}
+                sx={{ cursor: "pointer" }}
+              >
+                {currentLanguage}
+              </Typography>
+            </Tooltip>
+            <Popover
+              open={openLanguage}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+              anchorEl={anchorElLanguage}
+              id={idLanguage}
+              onClose={handleCloseLanguage}
             >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <Tooltip title="Tài khoản">
+              <Box padding="10px 15px">
+                <Box onClick={() => handleChangeLanguage("vi")} sx={{cursor: 'pointer'}}>Tiếng việt</Box>
+                <Box onClick={() => handleChangeLanguage("en")} sx={{cursor: 'pointer'}}>English</Box>
+              </Box>
+            </Popover>
+            <Tooltip title={t("account")} arrow>
               <IconButton
                 onClick={handleClickAccount}
                 size="small"
@@ -228,14 +160,10 @@ export default function Header() {
                 aria-haspopup="true"
                 aria-expanded={openAccount ? "true" : undefined}
               >
-                {/* {user?.avatar ? (
-                  <Avatar src={user.avatar} />
-                ) : (
-                  <Avatar sx={{ width: 40, height: 40 }}>
-                    {generateNameAvatar(user?.name!)}
-                  </Avatar>
-                )} */}
-                <GenerateAvatar avatar={user?.avatar} name={user?.name as string} />
+                <GenerateAvatar
+                  avatar={user?.avatar}
+                  name={user?.name as string}
+                />
               </IconButton>
             </Tooltip>
             <Popover
@@ -279,10 +207,10 @@ export default function Header() {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               // anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              <MenuItem onClick={handleCloseAccount}>
+              <MenuItem onClick={() => navigate(path.profile)}>
                 <Avatar /> Tài khoản của tôi
               </MenuItem>
-              <MenuItem onClick={handleCloseAccount}>
+              <MenuItem onClick={() => navigate('/friends/list')}>
                 <Avatar /> Bạn bè
               </MenuItem>
               <Divider />

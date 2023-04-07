@@ -11,6 +11,9 @@ interface NavLinkMenuItemProps {
 
 const NavLinkStyle = styled(NavLink)(() => ({
   textDecoration: "none",
+  '&.activeLink': {
+    background: 'green'
+  }
 }));
 
 const NavLinkMenuItem: FC<

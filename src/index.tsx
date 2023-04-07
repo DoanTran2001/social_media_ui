@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { PersistGate } from "redux-persist/integration/react";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,6 +33,7 @@ root.render(
           </PersistGate>
         </Provider>
         <ToastContainer />
+        <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
       </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>

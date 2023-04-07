@@ -12,6 +12,7 @@ import ImageUploader from "quill-image-uploader";
 import { useMutation } from "@tanstack/react-query";
 import postApi from "../../apis/post.api";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 Quill.register("modules/imageUploader", ImageUploader);
 
 interface CreatePostProps {
@@ -26,8 +27,8 @@ const ButtonClose = styled(Button)(() => ({
 }));
 
 function CreatePost({ closeOpenModal }: CreatePostProps) {
+  const {t} = useTranslation()
   const [content, setContent] = useState("");
-  console.log(process.env.REACT_APP_IMGBB_API_KEY);
   const createPostMutation = useMutation({
     mutationFn: (body: { content: string}) => postApi.createPost(body) 
   })
@@ -83,7 +84,7 @@ function CreatePost({ closeOpenModal }: CreatePostProps) {
           mb={2}
           fontWeight="bold"
         >
-          Tạo bài viết
+          {t("create post")}
         </Typography>
         <ButtonClose onClick={closeOpenModal}>
           <CloseIcon />
@@ -94,7 +95,7 @@ function CreatePost({ closeOpenModal }: CreatePostProps) {
           onChange={setContent}
           modules={modules}
         />
-        <Button type="submit">Đăng</Button>
+        <Button type="submit">{t("post")}</Button>
       </form>
     </CreatePostWrapper>
   );

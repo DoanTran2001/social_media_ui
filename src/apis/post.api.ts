@@ -12,6 +12,18 @@ const postApi = {
   },
   getPostByUser() {
     return http.get('/posts')
+  },
+  getPostAUser(id: string) {
+    return http.get(`/posts/${id}`)
+  },
+  likePost(idPost: string) {
+    return http.post(`/posts/likes/${idPost}`)
+  },
+  unLikePost(idPost: string) {
+    return http.delete(`/posts/unlikes/${idPost}`)
+  },
+  sharePost(idPost: string) {
+    return http.post(`/posts/shares/${idPost}`)
   }
 }
 export default postApi

@@ -25,8 +25,10 @@ import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import postApi from "../../apis/post.api";
 import PostItem from "../../components/PostItem";
+import { useTranslation } from "react-i18next";
 
 function ProfileContent() {
+  const { t } = useTranslation();
   const {
     isOpen: openEditProfile,
     openModal: openModalEditProfile,
@@ -39,7 +41,6 @@ function ProfileContent() {
     staleTime: 3 * 60 * 1000,
   });
   const dataPost = data?.data.data;
-  console.log("ProfileContent ~ dataPost:", dataPost)
   return (
     <Box
       width={"100%"}
@@ -47,8 +48,18 @@ function ProfileContent() {
       px="10px"
       py="15px"
     >
-      <Typography variant="h2" fontSize={25} textAlign="center" pb={3}>
-        Tài khoản của tôi
+      <Typography
+        variant="h2"
+        fontSize={30}
+        textAlign="center"
+        pb={3}
+        sx={{
+          textShadow: "0 0 0.2em #F87, 0 0 0.2em #F87",
+          // color: '#f1ebe5',
+          fontFamily: 'Lobster'
+        }}
+      >
+        {t("my account")}
       </Typography>
       <ProfileHead>
         <ProfileImageWrapper>
@@ -68,9 +79,11 @@ function ProfileContent() {
           </Box>
           <Box>
             <Typography variant="h3" fontSize={20} fontWeight="bold">
-              Đoan Trần
+              {user?.name!}
             </Typography>
-            <Typography>515 bạn bè</Typography>
+            <Typography>
+              {user?.friends?.length} {t("friend")}
+            </Typography>
             <AvatarGroup>
               <Avatar sx={{ width: "25px", height: "25px" }} />
               <Avatar sx={{ width: "25px", height: "25px" }} />
@@ -79,7 +92,7 @@ function ProfileContent() {
             </AvatarGroup>
           </Box>
         </ProfileImageWrapper>
-        <Button onClick={openModalEditProfile}>Chỉnh sửa trang cá nhân</Button>
+        <Button onClick={openModalEditProfile}>{t("edit profile")}</Button>
         <Modal
           open={openEditProfile}
           onClose={closeModalEditProfile}
@@ -125,14 +138,19 @@ function ProfileContent() {
         </Box>
       </Box>
       <Divider sx={{ marginY: "20px" }} />
-      <Box>
+      {/* <Box>
         <NavLink to={"/"}>Bài viết</NavLink>
         <NavLink to={"/"}>Bạn bè</NavLink>
-      </Box>
+      </Box> */}
       <div>
         {dataPost &&
           dataPost.length > 0 &&
-          dataPost.map((item: any) => <PostItem data={item} />)}
+          dataPost.map((item: any) => {
+            if (user?._id !== item.author._id) {
+              return <PostItem key={item._id} data={item} shared />;
+            }
+            return <PostItem key={item._id} data={item} />;
+          })}
       </div>
     </Box>
   );

@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { styled } from "@mui/material/styles";
 import { Container, Stack, Box, Typography } from "@mui/material";
-import background from "../../assets/images/background_auth.png";
+import background from "../../assets/images/bg.jpg";
 
 interface AuthLayoutProps {
   children: ReactNode;
@@ -13,6 +13,9 @@ const Wrapper = styled("div")(({ theme }) => ({
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
   position: "relative",
+  display: "flex",
+  alignContent: 'center',
+  justifyContent: 'center',
   "&::after": {
     position: "absolute",
     content: '""',
@@ -25,8 +28,9 @@ const Wrapper = styled("div")(({ theme }) => ({
 }));
 const Content = styled("div")(() => ({
   backgroundColor: "#fff",
+  opacity: '.85',
   width: "60%",
-
+  height: '100%',
   padding: "15px 10px",
   borderTopRightRadius: "10%",
   borderBottomRightRadius: "30%",
@@ -35,11 +39,13 @@ const Content = styled("div")(() => ({
 function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <Wrapper>
-      <Container maxWidth={"md"}>
+      {/* <Container maxWidth={"md"}> */}
         <Stack
           sx={{
             border: "1px solid #eee",
-
+            width: '800px',
+            height: '500px',
+            margin: 'auto',
             borderRadius: 4,
             overflow: "hidden",
             position: "relative",
@@ -51,14 +57,24 @@ function AuthLayout({ children }: AuthLayoutProps) {
           }}
         >
           <Content>
-            <Typography variant="h3" mb={3}>
-              Logo
+            <Typography
+              variant="h3"
+              fontSize="30px"
+              mb={3}
+              sx={{
+                textShadow: "0 0 0.2em #F87, 0 0 0.2em #F87",
+                fontStyle: 'italic',
+                // color: '#f1ebe5',
+                fontFamily: "Lobster",
+              }}
+            >
+              DSocial
             </Typography>
 
             {children}
           </Content>
         </Stack>
-      </Container>
+      {/* </Container> */}
     </Wrapper>
   );
 }

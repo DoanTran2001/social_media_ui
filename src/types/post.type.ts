@@ -10,7 +10,11 @@ export type PostData = {
   _id: string;
   content: string;
   author: User;
-  likes: string[];
+  likes: {
+    _id: string,
+    name: string,
+    avatar: string
+  }[];
   comments: string[];
   createdAt: string;
   updatedAt: string;

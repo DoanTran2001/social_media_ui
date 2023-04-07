@@ -10,7 +10,7 @@ import { Controller, useForm } from "react-hook-form";
 import InputForm from "../InputForm/InputForm";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
-import { DatePicker } from "@mui/x-date-pickers";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import DatePickers from "../DatePickers/DatePickers";
 import axios from "axios";
 import { Box, IconButton, InputBase, Tooltip } from "@mui/material";
@@ -20,8 +20,12 @@ import { useMutation } from "@tanstack/react-query";
 import userApi from "../../apis/user.api";
 import { toast } from "react-toastify";
 import { setUser } from "../../redux/user.slice";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 function EditProfile() {
+  const { t } = useTranslation();
   const {
     control,
     handleSubmit,
@@ -29,7 +33,7 @@ function EditProfile() {
     formState: { errors },
   } = useForm();
   const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [imageUrl, setImageUrl] = useState(user?.avatar);
 
   const editProfileMutation = useMutation({
@@ -38,17 +42,20 @@ function EditProfile() {
 
   const onSubmit = async (data: any) => {
     data.avatar = imageUrl ? imageUrl : user?.avatar || "";
+    data.date_of_birth = data.date_of_birth
+      ? new Date(`${data.date_of_birth}`)
+      : null;
     console.log(data);
     editProfileMutation.mutate(data, {
       onSuccess: (data) => {
         console.log(data);
-        toast.success(data.data.message)
-        dispatch(setUser(data.data.data))
+        toast.success(data.data.message);
+        dispatch(setUser(data.data.data));
       },
       onError: (error) => {
-        console.log(error)
-      }
-    })
+        console.log(error);
+      },
+    });
   };
   const handleImageUpload = async (e: any) => {
     const file = e.target.files[0];
@@ -80,8 +87,16 @@ function EditProfile() {
   };
   return (
     <div>
-      <Typography textAlign={"center"} fontSize="23px">
-        Chỉnh sửa thông tin cá nhân
+      <Typography
+        textAlign={"center"}
+        fontSize="30px"
+        sx={{
+          textShadow: "0 0 0.2em #F87, 0 0 0.2em #F87",
+          // color: '#f1ebe5',
+          fontFamily: "Lobster",
+        }}
+      >
+        {t("edit personal information")}
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <Grid container rowSpacing={1} columnSpacing={2}>
@@ -128,23 +143,24 @@ function EditProfile() {
             <InputForm
               control={control}
               name="name"
-              label="Tên"
+              label={t("name")}
               defaultValue={user?.name}
               error={errors.name}
             />
           </Grid>
           <Grid item xs={6}>
-            {/* <DatePickers
+            <DatePickers
               control={control}
               name="date_of_birth"
-              defaultValue={null}
-            /> */}
+              // format="DD-MM-YYYY"
+              defaultValue={dayjs(user?.date_of_birth) || ""}
+            />
           </Grid>
           <Grid item xs={6}>
             <InputForm
               control={control}
               name="address"
-              label="Địa chỉ"
+              label={t("address")}
               defaultValue={user?.address}
               error={errors.address}
             />
@@ -153,7 +169,7 @@ function EditProfile() {
             <InputForm
               control={control}
               name="phone"
-              label="Số điện thoại"
+              label={t("phone")}
               defaultValue={user?.phone}
               error={errors.phone}
             />
@@ -171,13 +187,13 @@ function EditProfile() {
             <InputForm
               control={control}
               name="bio"
-              label="Giới thiệu"
+              label={t("introduce")}
               defaultValue={user?.bio}
               error={errors.bio}
             />
           </Grid>
         </Grid>
-        <button type="submit">Cập nhật</button>
+        <button type="submit">{t("update")}</button>
       </form>
     </div>
   );

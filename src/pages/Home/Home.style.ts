@@ -10,5 +10,5 @@ export const Content = styled('div')(() => ({
 }))
 
 export const SideRight = styled('div')(() => ({
-
+  width: '25%'
 }))

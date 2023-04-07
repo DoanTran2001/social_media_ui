@@ -1,7 +1,6 @@
 import { Box, Typography, styled } from "@mui/material";
 import Button from "@mui/material/Button";
 
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 
 import { useForm } from "react-hook-form";
@@ -9,12 +8,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 import InputForm from "../../components/InputForm/InputForm";
 import InputPassword from "../../components/InputPassword";
-import authAPI from '../../apis/auth.api'
+import authAPI from "../../apis/auth.api";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/user.slice";
-
+import { path } from "../../constants/path";
 
 type FormData = {
   email: string;
@@ -33,26 +32,27 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const loginAccountMutation = useMutation({
-    mutationFn: (body: { email: string, password: string}) => authAPI.loginAccount(body)
-  })
+    mutationFn: (body: { email: string; password: string }) =>
+      authAPI.loginAccount(body),
+  });
   const handleSubmitLogin = async (values: any) => {
     console.log(values);
     loginAccountMutation.mutate(values, {
       onSuccess: (data) => {
-        console.log("handleSubmitLogin ~ data:", data)
-        toast.success(data.data.message)
-        dispatch(setUser(data.data.data?.user))
-        navigate('/')
+        console.log("handleSubmitLogin ~ data:", data);
+        toast.success(data.data.message);
+        dispatch(setUser(data.data.data?.user));
+        navigate("/");
       },
       onError: (error: any) => {
-        toast.error(error.response.data.message)
+        toast.error(error.response.data.message);
       },
-    })
-  }
+    });
+  };
   return (
     <Wrapper>
       <Box
@@ -95,12 +95,12 @@ function Login() {
 
         <Grid container>
           <Grid item xs>
-            <Link href="#" variant="body2">
+            <Link to="#" style={{ fontSize: '14px'}}>
               Forgot password?
             </Link>
           </Grid>
           <Grid item>
-            <Link href="#" variant="body2">
+            <Link to={path.register} style={{ fontSize: '14px'}}>
               {"Don't have an account? Sign Up"}
             </Link>
           </Grid>
@@ -108,7 +108,7 @@ function Login() {
         {/* </Box> */}
       </Box>
     </Wrapper>
-  )
+  );
 }
 
-export default Login
+export default Login;
