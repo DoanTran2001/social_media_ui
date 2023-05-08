@@ -9,11 +9,11 @@ import React from "react";
 import { useSelector } from "react-redux";
 import userApi from "../../../apis/user.api";
 import { RootState } from "../../../store";
-import { generateNameAvatar } from "../../../utils/utils";
+import { generateNameAvatar, randomGradient } from "../../../utils/utils";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const useStyles = makeStyles({
+export const useStyles = makeStyles({
   button: {
     backgroundImage: "linear-gradient(to right, #B24592, #F15F79)",
     borderRadius: "30px",
@@ -28,11 +28,23 @@ const useStyles = makeStyles({
       backgroundColor: "#F15F79",
     },
   },
+  avatar: {
+    margin: "0 auto",
+    // aspectRatio: 1,
+    outline: "75px solid #00000040",
+    outlineOffset: "-75px",
+    cursor: "pointer",
+    transition: "0.3s",
+    "&:hover": {
+      outline: "5px solid #4ECDC4",
+      outlineOffset: "10px",
+    },
+  },
 });
 
 function Suggestions() {
   const classes = useStyles();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user.user);
   const { data, isLoading } = useQuery({
     queryKey: ["suggest", user?._id],
     queryFn: () => userApi.getSuggestFriend(),
@@ -83,16 +95,14 @@ function Suggestions() {
                   {item.avatar ? (
                     <Avatar
                       src={item.avatar}
-                      sx={{
-                        margin: "0 auto",
-                        width: "150px",
-                        height: "150px",
-                      }}
+                      sx={{ width: "150px", height: "150px" }}
+                      className={classes.avatar}
                     />
                   ) : (
                     <Avatar
                       variant="rounded"
                       sx={{ width: "100%", height: "150px", fontSize: "50px" }}
+                      className={classes.avatar}
                     >
                       {generateNameAvatar(item.name)}
                     </Avatar>
@@ -101,8 +111,7 @@ function Suggestions() {
                     textAlign={"center"}
                     mt="20px"
                     sx={{
-                      backgroundImage:
-                        "linear-gradient(to right, #c31432, yellow)",
+                      backgroundImage: randomGradient("to right"),
                       WebkitBackgroundClip: "text",
                       MozBackgroundClip: "text",
                       backgroundClip: "text",

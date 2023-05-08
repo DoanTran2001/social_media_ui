@@ -22,7 +22,7 @@ function InputPost() {
     closeModal: closeModalCreatePost,
     openModal: openModalCreatePost,
   } = useModal();
-  const user = useSelector((state: RootState) => state.user!);
+  const user = useSelector((state: RootState) => state.user.user!);
   const { t } = useTranslation();
   return (
     <div>

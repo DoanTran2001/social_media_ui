@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -26,13 +26,18 @@ import {
   getCookie,
   getTokenFromCookie,
 } from "../../utils/utils";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
 import GenerateAvatar from "../GenerateAvatar";
 import { useTranslation } from "react-i18next";
 import { locales } from "../../i18n/i18n";
 import { useNavigate } from "react-router-dom";
 import { path } from "../../constants/path";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import userApi from "../../apis/user.api";
+import useDebounce from "../../hooks/useDebounce";
+import authAPI from "../../apis/auth.api";
+import { clearUser } from "../../redux/user.slice";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,9 +80,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Header() {
-  const { t } = useTranslation()
-  const navigate = useNavigate()
+  const { t } = useTranslation();
+  const user = useSelector((state: RootState) => state.user.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { i18n } = useTranslation();
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce({ value: search, delay: 500 });
+  // console.log("Header ~ debouncedSearch:", debouncedSearch)
   const currentLanguage = locales[i18n.language as keyof typeof locales];
   const {
     open: openAccount,
@@ -94,15 +104,39 @@ export default function Header() {
     id: idLanguage,
   } = usePopover({ idProps: "languageMore" });
 
-  const user = useSelector((state: RootState) => state.user);
-
   const handleChangeLanguage = (lng: "en" | "vi") => {
     i18n.changeLanguage(lng);
   };
 
+  const { data } = useQuery({
+    queryKey: ["search", search],
+    // queryFn: () => userApi.searchUser(search),
+  });
+  // console.log(data);
+
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
+  const logoutMutation = useMutation({
+    mutationFn: (data: any) => authAPI.logout(),
+  });
+
+  const handleLogout = () => {
+    logoutMutation.mutate(
+      {},
+      {
+        onSuccess: (data) => {
+          dispatch(clearUser());
+          console.log(data);
+        },
+      }
+    );
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="fixed" sx={{ mb: "100px" }}>
         <Toolbar>
           <Typography
             variant="h6"
@@ -112,15 +146,19 @@ export default function Header() {
           >
             DSocial
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          <form onSubmit={handleSearch}>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                // placeholder={t("search on Dsocial")}
+                // inputProps={{ "aria-label": "search" }}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </Search>
+          </form>
           <Box sx={{ flexGrow: 1 }} />
           <Box
             sx={{ display: { xs: "none", md: "flex", alignItems: "center" } }}
@@ -147,8 +185,18 @@ export default function Header() {
               onClose={handleCloseLanguage}
             >
               <Box padding="10px 15px">
-                <Box onClick={() => handleChangeLanguage("vi")} sx={{cursor: 'pointer'}}>Tiếng việt</Box>
-                <Box onClick={() => handleChangeLanguage("en")} sx={{cursor: 'pointer'}}>English</Box>
+                <Box
+                  onClick={() => handleChangeLanguage("vi")}
+                  sx={{ cursor: "pointer" }}
+                >
+                  Tiếng việt
+                </Box>
+                <Box
+                  onClick={() => handleChangeLanguage("en")}
+                  sx={{ cursor: "pointer" }}
+                >
+                  English
+                </Box>
               </Box>
             </Popover>
             <Tooltip title={t("account")} arrow>
@@ -208,23 +256,23 @@ export default function Header() {
               // anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
               <MenuItem onClick={() => navigate(path.profile)}>
-                <Avatar /> Tài khoản của tôi
+                <Avatar /> {t("my account")}
               </MenuItem>
-              <MenuItem onClick={() => navigate('/friends/list')}>
-                <Avatar /> Bạn bè
+              <MenuItem onClick={() => navigate("/friends/list")}>
+                <Avatar /> {t("friend")}
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleCloseAccount}>
                 <ListItemIcon>
                   <Settings fontSize="small" />
                 </ListItemIcon>
-                Cài đặt
+                {t("setting")}
               </MenuItem>
-              <MenuItem onClick={handleCloseAccount}>
+              <MenuItem onClick={handleLogout}>
                 <ListItemIcon>
                   <Logout fontSize="small" />
                 </ListItemIcon>
-                Đăng xuất
+                {t("logout")}
               </MenuItem>
             </Popover>
           </Box>

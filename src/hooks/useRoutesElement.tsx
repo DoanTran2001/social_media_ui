@@ -7,79 +7,142 @@ import FriendList from "../pages/Friend/pages/FriendList";
 import Request from "../pages/Friend/pages/Request";
 import Suggestions from "../pages/Friend/pages/Suggestions";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
+// import Login from "../pages/Login";
 import Profile from "../pages/Profile";
 import ProfileUser from "../pages/ProfileUser";
-import Register from "../pages/Register";
+// import Register from "../pages/Register";
+import Saved from "../pages/Saved";
+import { useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
+import { RootState } from "../store";
+import { Suspense, lazy } from "react";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
+import Birthday from "../pages/Friend/pages/Birthday";
+
+const Login = lazy(() => import("../pages/Login"));
+const Register = lazy(() => import("../pages/Register"));
+
+function ProtectedRoute() {
+  const user = useSelector((state: RootState) => state.user?.user?._id);
+  return user ? <Outlet /> : <Navigate to={path.login} />;
+}
+
+function RejectedRoute() {
+  const user = useSelector((state: RootState) => state.user?.user?._id);
+  console.log("RejectedRoute ~ user:", user);
+  return !user ? <Outlet /> : <Navigate to={path.home} />;
+}
 
 export default function useRoutesElement() {
   const routeElement = useRoutes([
+    // {
+    //   path: "",
+    //   element: <RejectedRoute />,
+    //   children: [
+        {
+          path: path.register,
+          element: (
+            <AuthLayout>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Register />
+              </Suspense>
+            </AuthLayout>
+          ),
+        },
+        {
+          path: path.login,
+          element: (
+            <AuthLayout>
+              <Suspense fallback={<div>Loading...</div>}>
+                <Login />
+              </Suspense>
+            </AuthLayout>
+          ),
+        },
+    //   ],
+    // },
     {
-      path: path.register,
+      path: path.forgotPassword,
       element: (
         <AuthLayout>
-          <Register />
+          <ForgotPassword />
         </AuthLayout>
-      ),
+      )
     },
     {
-      path: path.login,
+      path: path.resetPassword,
       element: (
         <AuthLayout>
-          <Login />
+          <ResetPassword />
         </AuthLayout>
-      ),
+      )
     },
     {
-      path: path.home,
-      element: (
-        <MainLayout>
-          <Home />
-        </MainLayout>
-      ),
-    },
-    {
-      path: path.profile,
-      element: (
-        <MainLayout>
-          <Profile />
-        </MainLayout>
-      ),
-    },
-    {
-      path: path.profileUser,
-      element: (
-        <MainLayout>
-          <ProfileUser />
-        </MainLayout>
-      ),
-    },
-    {
-      path: path.friend,
-      element: (
-        <MainLayout>
-          <Friend />
-        </MainLayout>
-      ),
+      path: '',
+      element: <ProtectedRoute />,
       children: [
         {
-          path: "/friends/request",
-          element: <Request />,
+          path: path.home,
+          element: (
+            <MainLayout>
+              <Home />
+            </MainLayout>
+          ),
         },
         {
-          path: "/friends/suggestions",
-          element: <Suggestions />,
+          path: path.profile,
+          element: (
+            <MainLayout>
+              <Profile />
+            </MainLayout>
+          ),
         },
         {
-          path: "/friends/list",
-          element: <FriendList />,
+          path: path.profileUser,
+          element: (
+            <MainLayout>
+              <ProfileUser />
+            </MainLayout>
+          ),
         },
         {
-          path: "/friends/birthdays",
-          element: <Request />,
+          path: path.saved,
+          element: (
+            <MainLayout>
+              <Saved />
+            </MainLayout>
+          ),
         },
-      ],
+        {
+          path: path.friend,
+          element: (
+            <MainLayout>
+              <Friend />
+            </MainLayout>
+          ),
+          children: [
+            {
+              path: "/friends/request",
+              element: <Request />,
+            },
+            {
+              path: "/friends/suggestions",
+              element: <Suggestions />,
+            },
+            {
+              path: "/friends/list",
+              element: <FriendList />,
+            },
+            {
+              path: "/friends/birthdays",
+              element: <Birthday />,
+            },
+          ],
+        },
+      ]
     },
+    
   ]);
   return routeElement;
 }

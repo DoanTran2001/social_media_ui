@@ -33,7 +33,7 @@ function Menu() {
   const { t } = useTranslation();
   const classes = useStyles();
   return (
-    <Box display="flex" flexDirection="column" gap="10px" mt="10px">
+    <Box display="flex" flexDirection="column" gap="10px" position="fixed">
       {menuSidebar.map((item, index) => (
         <NavLink
           to={item.path}

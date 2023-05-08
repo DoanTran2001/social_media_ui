@@ -11,7 +11,8 @@ export type CommentData = {
   content: string;
   author: {
     _id: string,
-    name: string
+    name: string,
+    avatar?: string
   }
   post: string;
   createdAt: string;
@@ -22,7 +23,8 @@ export type CommentData = {
 type SubComment = {
   author: {
     _id: string,
-    name: string
+    name: string,
+    avatar?: string
   };
   content: string;
   createdAt: string;

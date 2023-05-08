@@ -39,7 +39,7 @@ function Friend() {
   const classes = useStyles();
   const { t } = useTranslation();
   return (
-    <Stack direction={"row"} gap={5}>
+    <Stack direction={"row"} gap={5} mt="74px">
       <SideLeft>
         <Menu />
       </SideLeft>

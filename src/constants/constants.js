@@ -25,8 +25,8 @@ export const menuSidebar = [
   },
   {
     icon: <BookmarkIcon />,
-    title: 'Lưu njjj',
-    path: '/save',
+    title: 'Lưu',
+    path: '/saved?key=all',
     locale: 'save'
   }
 ]

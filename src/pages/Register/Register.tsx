@@ -12,6 +12,8 @@ import InputPassword from "../../components/InputPassword";
 import authAPI from "../../apis/auth.api";
 import { schema } from "../../utils/rules";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { path } from "../../constants/path";
 
 type FormData = {
   name: string;
@@ -33,6 +35,7 @@ function Register() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const navigate = useNavigate()
   const registerAccountMutation = useMutation({
     mutationFn: (body: FormData) => authAPI.registerAccount(body),
   });
@@ -41,7 +44,8 @@ function Register() {
     registerAccountMutation.mutate(value, {
       onSuccess: (data) => {
         console.log(data);
-        
+        toast.success(data.data.message)
+        navigate(path.login)
       },
       onError: (error: any) => {
         toast.error(error.response.data.message)

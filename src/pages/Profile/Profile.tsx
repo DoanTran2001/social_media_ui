@@ -5,7 +5,7 @@ import ProfileContent from './ProfileContent'
 
 function Profile() {
   return (
-    <Stack direction={'row'} gap={5}>
+    <Stack direction={'row'} gap={5} mt="74px">
       <SideLeft>
         <Menu />
       </SideLeft>

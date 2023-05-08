@@ -12,7 +12,6 @@ function PostList() {
     staleTime: 3 * 60 * 1000,
   });
   const dataPost = data?.data.data;
-  // console.log("PostList ~ dataPost:", dataPost);
   return (
     <div>
       {isLoading && (

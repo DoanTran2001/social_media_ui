@@ -32,7 +32,7 @@ function EditProfile() {
     setValue,
     formState: { errors },
   } = useForm();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user.user);
   const dispatch = useDispatch();
   const [imageUrl, setImageUrl] = useState(user?.avatar);
 

@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useState } from "react";
 import postApi from "../../apis/post.api";
 import userApi from "../../apis/user.api";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import { ProfileHead, ProfileImageWrapper } from "../Profile/Profile.style";
-import { Avatar, Typography } from "@mui/material";
+import { Avatar, Button, Typography } from "@mui/material";
 import { generateNameAvatar } from "../../utils/utils";
 import { useTranslation } from "react-i18next";
 import PhoneIcon from "@mui/icons-material/Phone";
@@ -14,20 +14,35 @@ import PersonIcon from "@mui/icons-material/Person";
 import WebIcon from "@mui/icons-material/Web";
 import InfoIcon from "@mui/icons-material/Info";
 import PostItem from "../../components/PostItem";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import useModal from "../../hooks/useModal";
+import ChatSnackbar from "../../components/ChatSnackbar";
 
 interface ProfileUserContentProps {
   id: string;
 }
 
+type ReceiverType = {
+  _id: string;
+  name: string;
+  avatar?: string;
+};
+
 function ProfileUserContent({ id }: ProfileUserContentProps) {
   const { t } = useTranslation();
+  const [receiver, setReceiver] = useState<ReceiverType | null>(null);
   const { data, isLoading } = useQuery({
     queryKey: ["profile", id],
     queryFn: () => userApi.getUser(id),
   });
+  const {
+    isOpen: openSnackbar,
+    openModal: setOpenSnackbar,
+    closeModal: setCloseSnackbar,
+  } = useModal();
   const profileData = data?.data.data;
-  console.log("ProfileUserContent ~ profileData:", profileData)
-
+  const user = useSelector((state: RootState) => state.user.user);
   return (
     <>
       {isLoading ? (
@@ -38,7 +53,6 @@ function ProfileUserContent({ id }: ProfileUserContentProps) {
           sx={{
             border: "1px solid #eee",
             borderRadius: "10px",
-            marginTop: "15px",
           }}
           px="10px"
           py="15px"
@@ -66,14 +80,129 @@ function ProfileUserContent({ id }: ProfileUserContentProps) {
                 <Typography>
                   {profileData?.friends?.length} {t("friend")}
                 </Typography>
-                {/* <AvatarGroup>
-              <Avatar sx={{ width: "25px", height: "25px" }} />
-              <Avatar sx={{ width: "25px", height: "25px" }} />
-              <Avatar sx={{ width: "25px", height: "25px" }} />
-              <Avatar sx={{ width: "25px", height: "25px" }} />
-            </AvatarGroup> */}
               </Box>
             </ProfileImageWrapper>
+            <Box display="flex" gap="10px">
+              {user?.friends
+                ?.map((friend) => friend._id)
+                .includes(profileData._id) ? (
+                <>
+                  <Button
+                    sx={{
+                      background: "#E4E6EB",
+                      color: "#051B1B",
+                      padding: "5px 10px",
+                      "&:hover": {
+                        background: "#e4e6ebc9",
+                      },
+                    }}
+                  >
+                    <img
+                      src="https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/c9BbXR9AzI1.png"
+                      alt=""
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        marginRight: "10px",
+                      }}
+                    />
+                    Bạn bè
+                  </Button>
+                  <Button
+                    sx={{
+                      background: "#1B74E4",
+                      color: "#fff",
+                      padding: "5px 10px",
+                      "&:hover": {
+                        background: "#1b75e4b0",
+                      },
+                    }}
+                    onClick={() => {
+                      setOpenSnackbar();
+                      setReceiver({
+                        _id: profileData._id,
+                        name: profileData.name,
+                        avatar: profileData.avatar,
+                      });
+                    }}
+                  >
+                    <img
+                      src="https://static.xx.fbcdn.net/rsrc.php/v3/yE/r/1z-5F6qDswz.png"
+                      alt=""
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        marginRight: "10px",
+                        color: "white",
+                      }}
+                    />
+                    Nhắn tin
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    sx={{
+                      background: "#1B74E4",
+                      color: "#fff",
+                      padding: "5px 10px",
+                      "&:hover": {
+                        background: "#1b75e4b0",
+                      },
+                    }}
+                  >
+                    <img
+                      src="https://static.xx.fbcdn.net/rsrc.php/v3/y1/r/ImGMiWz-mEy.png"
+                      alt=""
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        marginRight: "10px",
+                      }}
+                    />
+                    Thêm bạn bè
+                  </Button>
+                  <Button
+                    sx={{
+                      background: "#E4E6EB",
+                      color: "#051B1B",
+                      padding: "5px 10px",
+                      "&:hover": {
+                        background: "#e4e6ebc9",
+                      },
+                    }}
+                    onClick={() => {
+                      setOpenSnackbar();
+                      setReceiver({
+                        _id: profileData._id,
+                        name: profileData.name,
+                        avatar: profileData.avatar,
+                      });
+                    }}
+                  >
+                    <img
+                      src="https://static.xx.fbcdn.net/rsrc.php/v3/yE/r/1z-5F6qDswz.png"
+                      alt=""
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        marginRight: "10px",
+                        color: "white",
+                      }}
+                    />
+                    Nhắn tin
+                  </Button>
+                </>
+              )}
+              {receiver && (
+                <ChatSnackbar
+                  open={openSnackbar}
+                  setOpen={setOpenSnackbar}
+                  setClose={setCloseSnackbar}
+                  receiver={receiver}
+                />
+              )}
+            </Box>
           </ProfileHead>
           <Box
             marginBottom="20px"

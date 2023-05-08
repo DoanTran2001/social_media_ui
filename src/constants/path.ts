@@ -4,6 +4,9 @@ export const path = {
   register: '/dang-ky',
   profile: '/tai-khoan-cua-toi',
   profileUser: '/profile/:id',
-  friend: '/friends'
+  friend: '/friends',
+  saved: '/saved',
+  forgotPassword: '/forgot-password',
+  resetPassword: '/resetpassword/:userId/:token',
 }
 

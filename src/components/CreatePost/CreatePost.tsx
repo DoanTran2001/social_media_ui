@@ -17,6 +17,11 @@ Quill.register("modules/imageUploader", ImageUploader);
 
 interface CreatePostProps {
   closeOpenModal: () => void;
+  edit?: boolean;
+  editPostInfo?: {
+    postId?: string;
+    valuePost?: string;
+  };
 }
 
 const CreatePostWrapper = styled("div")(() => ({}));
@@ -26,12 +31,16 @@ const ButtonClose = styled(Button)(() => ({
   right: 10,
 }));
 
-function CreatePost({ closeOpenModal }: CreatePostProps) {
-  const {t} = useTranslation()
+function CreatePost({ closeOpenModal, edit, editPostInfo }: CreatePostProps) {
+  const { t } = useTranslation();
   const [content, setContent] = useState("");
   const createPostMutation = useMutation({
-    mutationFn: (body: { content: string}) => postApi.createPost(body) 
-  })
+    mutationFn: (body: { content: string }) => postApi.createPost(body),
+  });
+  const editPostMutation = useMutation({
+    mutationFn: (body: { content: string; postId: string }) =>
+      postApi.editPost(body),
+  });
   const modules = useMemo(
     () => ({
       toolbar: [
@@ -68,11 +77,23 @@ function CreatePost({ closeOpenModal }: CreatePostProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(content);
-    createPostMutation.mutate({content}, {
-      onSuccess: (data) => {
-        toast.success(data.data.message)
-      }
-    })
+    if (edit) {
+      const variables = { postId: editPostInfo?.postId as string, content };
+      editPostMutation.mutate(variables, {
+        onSuccess: (data) => {
+          toast.success(data.data.message);
+        },
+      });
+    } else {
+      createPostMutation.mutate(
+        { content },
+        {
+          onSuccess: (data) => {
+            toast.success(data.data.message);
+          },
+        }
+      );
+    }
   };
   return (
     <CreatePostWrapper>
@@ -84,14 +105,14 @@ function CreatePost({ closeOpenModal }: CreatePostProps) {
           mb={2}
           fontWeight="bold"
         >
-          {t("create post")}
+          {edit ? t("edit post") : t("create post")}
         </Typography>
         <ButtonClose onClick={closeOpenModal}>
           <CloseIcon />
         </ButtonClose>
         <ReactQuill
           theme="snow"
-          value={content}
+          value={content || editPostInfo?.valuePost}
           onChange={setContent}
           modules={modules}
         />

@@ -18,4 +18,5 @@ export type PostData = {
   comments: string[];
   createdAt: string;
   updatedAt: string;
+  savedKey?: string;
 };

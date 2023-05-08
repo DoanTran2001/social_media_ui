@@ -95,7 +95,7 @@ function Login() {
 
         <Grid container>
           <Grid item xs>
-            <Link to="#" style={{ fontSize: '14px'}}>
+            <Link to={path.forgotPassword} style={{ fontSize: '14px'}}>
               Forgot password?
             </Link>
           </Grid>

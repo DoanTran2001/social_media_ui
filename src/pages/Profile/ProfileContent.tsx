@@ -34,7 +34,7 @@ function ProfileContent() {
     openModal: openModalEditProfile,
     closeModal: closeModalEditProfile,
   } = useModal();
-  const user = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user.user);
   const { data } = useQuery({
     queryKey: ["posts_by_user"],
     queryFn: () => postApi.getPostByUser(),
@@ -56,7 +56,7 @@ function ProfileContent() {
         sx={{
           textShadow: "0 0 0.2em #F87, 0 0 0.2em #F87",
           // color: '#f1ebe5',
-          fontFamily: 'Lobster'
+          fontFamily: "Lobster",
         }}
       >
         {t("my account")}
