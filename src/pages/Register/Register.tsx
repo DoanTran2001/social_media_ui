@@ -1,7 +1,5 @@
 import { Box, Typography, styled } from "@mui/material";
 import Button from "@mui/material/Button";
-
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 
 import { useForm } from "react-hook-form";
@@ -12,7 +10,7 @@ import InputPassword from "../../components/InputPassword";
 import authAPI from "../../apis/auth.api";
 import { schema } from "../../utils/rules";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { path } from "../../constants/path";
 
 type FormData = {
@@ -35,7 +33,7 @@ function Register() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const registerAccountMutation = useMutation({
     mutationFn: (body: FormData) => authAPI.registerAccount(body),
   });
@@ -44,11 +42,11 @@ function Register() {
     registerAccountMutation.mutate(value, {
       onSuccess: (data) => {
         console.log(data);
-        toast.success(data.data.message)
-        navigate(path.login)
+        toast.success(data.data.message);
+        navigate(path.login);
       },
       onError: (error: any) => {
-        toast.error(error.response.data.message)
+        toast.error(error.response.data.message);
         console.log("handleSubmitRegister ~ error:", error);
       },
     });
@@ -99,18 +97,53 @@ function Register() {
           </Button>
         </form>
 
-        <Grid container>
-          <Grid item xs>
-            <Link href="#" variant="body2">
-              Forgot password?
+        <Box>
+          <Typography
+            fontSize="14px"
+            color="rgba(0,0,0,.87)"
+            padding="0 5px"
+            mb="10px"
+          >
+            Bằng việc đăng ký, bạn đã đồng ý với Dsocial về{" "}
+            <Link
+              to={path.terms_service}
+              target="_blank"
+              style={{
+                textDecoration: "none",
+                color: "#ee4d2d",
+                userSelect: "none",
+              }}
+            >
+              Điều khoản dịch vụ
+            </Link>{" "}
+            &{" "}
+            <Link
+              to="#"
+              style={{
+                textDecoration: "none",
+                color: "#ee4d2d",
+                userSelect: "none",
+              }}
+            >
+              Tiêu chuẩn cộng đồng
             </Link>
-          </Grid>
-          <Grid item>
-            <Link href="#" variant="body2">
-              {"Don't have an account? Sign Up"}
+          </Typography>
+          <Box color="rgba(0,0,0,.26)">
+            Bạn đã có tài khoản?
+            <Link
+              to={path.login}
+              style={{
+                textDecoration: "none",
+                color: "#ee4d2d",
+                userSelect: "none",
+                fontWeight:"500",
+                marginLeft: '5px'
+              }}
+            >
+              Đăng nhập
             </Link>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
         {/* </Box> */}
       </Box>
     </Wrapper>

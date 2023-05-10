@@ -19,6 +19,7 @@ import { Suspense, lazy } from "react";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import Birthday from "../pages/Friend/pages/Birthday";
+import TermsService from "../pages/TermsService/Terms_Service";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
@@ -40,26 +41,26 @@ export default function useRoutesElement() {
     //   path: "",
     //   element: <RejectedRoute />,
     //   children: [
-        {
-          path: path.register,
-          element: (
-            <AuthLayout>
-              <Suspense fallback={<div>Loading...</div>}>
-                <Register />
-              </Suspense>
-            </AuthLayout>
-          ),
-        },
-        {
-          path: path.login,
-          element: (
-            <AuthLayout>
-              <Suspense fallback={<div>Loading...</div>}>
-                <Login />
-              </Suspense>
-            </AuthLayout>
-          ),
-        },
+    {
+      path: path.register,
+      element: (
+        <AuthLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Register />
+          </Suspense>
+        </AuthLayout>
+      ),
+    },
+    {
+      path: path.login,
+      element: (
+        <AuthLayout>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Login />
+          </Suspense>
+        </AuthLayout>
+      ),
+    },
     //   ],
     // },
     {
@@ -68,7 +69,11 @@ export default function useRoutesElement() {
         <AuthLayout>
           <ForgotPassword />
         </AuthLayout>
-      )
+      ),
+    },
+    {
+      path: path.terms_service,
+      element: <TermsService />,
     },
     {
       path: path.resetPassword,
@@ -76,10 +81,10 @@ export default function useRoutesElement() {
         <AuthLayout>
           <ResetPassword />
         </AuthLayout>
-      )
+      ),
     },
     {
-      path: '',
+      path: "",
       element: <ProtectedRoute />,
       children: [
         {
@@ -140,9 +145,8 @@ export default function useRoutesElement() {
             },
           ],
         },
-      ]
+      ],
     },
-    
   ]);
   return routeElement;
 }

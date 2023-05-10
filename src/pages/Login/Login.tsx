@@ -96,12 +96,13 @@ function Login() {
         <Grid container>
           <Grid item xs>
             <Link to={path.forgotPassword} style={{ fontSize: '14px'}}>
-              Forgot password?
+              Quên mật khẩu?
             </Link>
           </Grid>
           <Grid item>
+              Bạn mới biết đến Dsocial
             <Link to={path.register} style={{ fontSize: '14px'}}>
-              {"Don't have an account? Sign Up"}
+              Đăng ký
             </Link>
           </Grid>
         </Grid>
