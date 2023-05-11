@@ -16,7 +16,7 @@ export const ProfileImageWrapper = styled("div")(() => ({
 export const ModalContentContainer = styled("div")(() => ({
   overflowY: "auto",
   background: "#fff",
-  height: "500px",
+  minHeight: "500px",
   width: '900px',
   borderRadius: '15px',
   padding: '10px'

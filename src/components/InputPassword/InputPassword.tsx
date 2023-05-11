@@ -15,11 +15,13 @@ interface InputPasswordProps {
   htmlForInput: string,
   name: string,
   control: any,
-  error: any
+  error: any,
+  variant?: "standard" | "filled" | "outlined",
+  label?: string
 }
 
 function InputPassword(props: InputPasswordProps) {
-  const { name, control, htmlForInput, error} = props
+  const { name, control, htmlForInput, error, variant = "standard", label = "Password"} = props
   const [showPassword, setShowPassword] = useState(false);
   const { field } = useController({
     control,
@@ -30,8 +32,8 @@ function InputPassword(props: InputPasswordProps) {
     setShowPassword((show) => !show);
   };
   return (
-    <FormControl sx={{ width: "100%" }} variant="standard">
-      <InputLabel htmlFor={htmlForInput}>Password</InputLabel>
+    <FormControl sx={{ width: "100%" }} variant={variant}>
+      <InputLabel htmlFor={htmlForInput}>{label}</InputLabel>
       <Input
         id={htmlForInput}
         type={showPassword ? "text" : "password"}

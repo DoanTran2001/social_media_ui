@@ -6,7 +6,7 @@ import moment from "moment";
 import Box from "@mui/material/Box";
 import { Avatar, Button, Divider, Stack, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import chatMessageApi from "../../apis/chatMessage.api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -29,6 +29,7 @@ interface Message {
 
 function ChatSnackbar(props: ChatSnackbarProps) {
   const [message, setMessage] = useState("");
+  const queryClient = useQueryClient();
   const [a, setA] = useState<Message[]>([]);
   const { open, receiver, setClose } = props;
   const userId = useSelector((state: RootState) => state.user.user?._id!);
@@ -52,6 +53,9 @@ function ChatSnackbar(props: ChatSnackbarProps) {
       onSuccess: (data) => {
         console.log(data);
         setMessage("");
+        queryClient.invalidateQueries({
+          queryKey: ["chatMessage", receiver],
+        })
       },
     });
     // socket.emit("send-message", {

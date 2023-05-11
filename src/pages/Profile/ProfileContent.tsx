@@ -95,7 +95,7 @@ function ProfileContent() {
         <Button onClick={openModalEditProfile}>{t("edit profile")}</Button>
         <Modal
           open={openEditProfile}
-          onClose={closeModalEditProfile}
+          // onClose={closeModalEditProfile}
           sx={{
             display: "flex",
             alignItems: "center",
@@ -103,7 +103,7 @@ function ProfileContent() {
           }}
         >
           <ModalContentContainer>
-            <EditProfile />
+            <EditProfile closeModal={closeModalEditProfile} />
           </ModalContentContainer>
         </Modal>
       </ProfileHead>

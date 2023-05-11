@@ -118,7 +118,8 @@ function Register() {
             </Link>{" "}
             &{" "}
             <Link
-              to="#"
+              to={path.communityStandards}
+              target="_blank"
               style={{
                 textDecoration: "none",
                 color: "#ee4d2d",

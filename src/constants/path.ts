@@ -8,6 +8,7 @@ export const path = {
   saved: '/saved',
   forgotPassword: '/forgot-password',
   resetPassword: '/resetpassword/:userId/:token',
-  terms_service: '/term'
+  terms_service: '/term',
+  communityStandards: "/community-standards"
 }
 

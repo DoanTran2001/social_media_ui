@@ -40,5 +40,10 @@
   "add to collection": "Thêm vào bộ sưu tập",
   "unsave": "Bỏ lưu",
   "unsave post": "Bỏ lưu bài viết",
-  "remove this item from saved item": "Gỡ mục này khỏi mục đã lưu"
+  "remove this item from saved item": "Gỡ mục này khỏi mục đã lưu",
+  "delete": "Xóa",
+  "change password": "Đổi mật khẩu",
+  "oldPassword": "Mật khẩu cũ",
+  "newPassword": "Mật khẩu mới",
+  "confirmPassword": "Xác nhận mật khẩu"
 }

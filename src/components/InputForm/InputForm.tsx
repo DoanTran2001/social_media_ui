@@ -8,10 +8,11 @@ interface InputProps {
   type?: string;
   control: any;
   error: any;
-  defaultValue?: string
+  defaultValue?: string,
+  variant?: "standard" | "filled" | "outlined"
 }
 
-function InputForm({ label, name, type = "text", control, error, defaultValue = "" }: InputProps) {
+function InputForm({ label, name, type = "text", control, error, variant = "standard", defaultValue = "" }: InputProps) {
   const { field } = useController({
     control,
     name,
@@ -25,7 +26,7 @@ function InputForm({ label, name, type = "text", control, error, defaultValue = 
       {...field}
       error={error}
       helperText={error ? error.message : ""}
-      variant="standard"
+      variant={variant}
       sx={{ width: "100%", marginBottom: "10px" }}
     />
   );

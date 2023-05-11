@@ -6,6 +6,8 @@ const authAPI = {
     http.post<AuthResponse>("/auth/register", body),
   loginAccount: (body: { email: string; password: string }) =>
     http.post<AuthResponse>("/auth/login", body),
+  changePassword: (body: { oldPassword: string; newPassword: string }) =>
+    http.put("/auth/change-password", body),
   forgotPassword: (body: { email: string }) =>
     http.post("/auth/forgot-password", body),
   resetPassword: (data: { token: string; password: string }) =>
@@ -13,8 +15,8 @@ const authAPI = {
       password: data.password,
     }),
   logout: () => {
-    return http.post('/auth/logout')
-  }
+    return http.post("/auth/logout");
+  },
 };
 
 export default authAPI;

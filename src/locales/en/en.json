@@ -40,5 +40,10 @@
   "add to collection": "Add to collection",
   "unsave": "Unsave",
   "unsave post": "Unsave post",
-  "remove this item from saved item": "Remove this item from saved item"
+  "remove this item from saved item": "Remove this item from saved item",
+  "delete": "Delete",
+  "change password": "Change password",
+  "oldPassword": "Old Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password"
 }

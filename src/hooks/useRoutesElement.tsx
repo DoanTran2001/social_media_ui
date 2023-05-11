@@ -20,6 +20,7 @@ import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import Birthday from "../pages/Friend/pages/Birthday";
 import TermsService from "../pages/TermsService/Terms_Service";
+import CommunityStandards from "../pages/CommunityStandards";
 
 const Login = lazy(() => import("../pages/Login"));
 const Register = lazy(() => import("../pages/Register"));
@@ -74,6 +75,10 @@ export default function useRoutesElement() {
     {
       path: path.terms_service,
       element: <TermsService />,
+    },
+    {
+      path: path.communityStandards,
+      element: <CommunityStandards />,
     },
     {
       path: path.resetPassword,

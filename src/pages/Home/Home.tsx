@@ -4,7 +4,7 @@ import { Content, SideLeft, SideRight } from "./Home.style";
 import Menu from "../../components/Menu";
 import PostList from "../../components/PostList";
 import InputPost from "../../components/InputPost";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import userApi from "../../apis/user.api";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -27,6 +27,7 @@ type ReceiverType = {
 
 function Home() {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const {
     isOpen: openSnackbar,
     openModal: setOpenSnackbar,
@@ -65,8 +66,29 @@ function Home() {
     };
     acceptRequestAddFriendMudation.mutate(dataAcceptRequest, {
       onSuccess: (data) => {
-        console.log(data);
         toast.success(data.data.message);
+        queryClient.invalidateQueries({
+          queryKey: ["request-list", user?._id],
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+    });
+  };
+  const handleDeleteRequest = (requestId: string) => {
+    const dataDeleteRequest = {
+      requestId: requestId,
+      body: {
+        status: "declined",
+      },
+    };
+    acceptRequestAddFriendMudation.mutate(dataDeleteRequest, {
+      onSuccess: (data) => {
+        toast.success(data.data.message);
+        queryClient.invalidateQueries({
+          queryKey: ["request-list", user?._id],
+        });
       },
       onError: (error) => {
         console.log(error);
@@ -134,6 +156,12 @@ function Home() {
                     >
                       {t("confirm")}
                     </Button>
+                    <Button
+                      sx={{ backgroundColor: "#9198e5", mt: "5px", ml: "5px" }}
+                      onClick={() => handleDeleteRequest(request._id)}
+                    >
+                      {t("delete")}
+                    </Button>
                   </Box>
                 </Stack>
               );
@@ -188,7 +216,8 @@ function Home() {
           <Typography variant="h3" fontSize="20px" fontWeight="bold" py="10px">
             {t("contacts")}
           </Typography>
-          {friendListData && friendListData.length > 0 &&
+          {friendListData &&
+            friendListData.length > 0 &&
             friendListData.map((item: any) => {
               return (
                 <Box
