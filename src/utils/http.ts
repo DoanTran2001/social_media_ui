@@ -4,7 +4,7 @@ class Http {
   instance: AxiosInstance
   constructor() {
     this.instance = axios.create({
-      baseURL: 'http://localhost:5000/api/',
+      baseURL: 'https://social-media-api-k9t9.onrender.com/api/',
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
